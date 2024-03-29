@@ -1,10 +1,19 @@
 import random
 
-AVAILABLE_TYPES = ['fname']
+AVAILABLE_TYPES = ['fname', 'lname']
 class DataGenerator():
     def __init__(self):
         pass
+    """
+    Generates an array of data based on the given type and number of items.
+    Args:
+        type (str): The type of data to generate.
+        n (int): The number of items to generate.
+    Returns:
+        list: A list of processed data based on the given type and number of items.
+    """
     def simple_generate(self, type: str, n: int) -> list:
+        type = type.lower()
         if type not in AVAILABLE_TYPES:
             raise ValueError("Type must be in " + str(AVAILABLE_TYPES))
         else:
@@ -20,4 +29,4 @@ class DataGenerator():
             return processed_data
 
 dataGenerator = DataGenerator()
-print(dataGenerator.simple_generate('fname', 50))
+print(dataGenerator.simple_generate('lname', 10))
