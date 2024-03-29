@@ -4,7 +4,17 @@ AVAILABLE_TYPES = ['fname', 'lname', 'full_name']
 DOMAINS = ['@gmail.com', '@yahoo.com', '@outlook.com']
 class DataGenerator():
     def __init__(self):
-        pass
+        self.types = []
+        self.parameters = {}
+    def add(self, type: str, n: int, duplicate: bool = False, domain: str = "", minlen: int = 0, maxlen: int = 12):
+        if minlen < 0:
+            raise ValueError("minlen must be a positive integer")
+        if maxlen < 0:
+            raise ValueError("maxlen must be a positive integer")
+        if maxlen < minlen:
+            raise ValueError("maxlen must be greater than minlen")
+        self.types.append(type)
+        self.parameters[type] = {'n': n, 'duplicate': duplicate, 'domain': domain, 'minlen': minlen, 'maxlen': maxlen}
     """
     Generates an array of data based on the given type and number of items.
     Args:
@@ -55,7 +65,7 @@ class DataGenerator():
         if not lname:
             email += fname
         else:
-            choice = random.randint(1, 5)
+            choice = random.randint(1, 6)
             if choice == 1:
                 email += fname + lname
             elif choice == 2:
@@ -66,6 +76,8 @@ class DataGenerator():
                 email += fname + lname[0]
             elif choice == 5:
                 email += lname[0] + fname
+            elif choice == 6:
+                email += fname[0] + lname[0]
         while random.randint(1, 2) == 1:
             email += str(random.randint(0, 9))
         if not domain:
