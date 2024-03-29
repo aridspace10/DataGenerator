@@ -9,10 +9,11 @@ class DataGenerator():
     Args:
         type (str): The type of data to generate.
         n (int): The number of items to generate.
+        duplicate (bool, optional): Whether to allow duplicate items. Defaults to False.
     Returns:
         list: A list of processed data based on the given type and number of items.
     """
-    def simple_generate(self, type: str, n: int) -> list:
+    def simple_generate(self, type: str, n: int, duplicate: bool = False) -> list:
         type = type.lower()
         processed_data = []
         if type not in AVAILABLE_TYPES:
@@ -25,7 +26,7 @@ class DataGenerator():
                         raise ValueError("n must be less than " + str(len(raw_data)))       
                     while len(processed_data) < n:
                         data = (random.choice(raw_data))
-                        if data not in processed_data:
+                        if not duplicate or data not in processed_data:
                             processed_data.append(data)
             else:
                 fname = self.simple_generate('fname', n)
