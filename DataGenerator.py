@@ -1,4 +1,5 @@
 import random
+import string
 
 AVAILABLE_TYPES = ['fname', 'lname', 'full_name']
 DOMAINS = ['@gmail.com', '@yahoo.com', '@outlook.com']
@@ -85,7 +86,24 @@ class DataGenerator():
         else:
             email += "@" + domain
         return email
+    def generate_password(self, length: int = 0, randomized: bool = True, special_chars: bool = False, numbers: bool = False, uppercase: bool = False, keyword: str = "") -> str:
+        if not isinstance(length, int) or (length < 4 and length != 0):
+            raise ValueError("length must be an integer larger the  4")
+        if not length:
+            length = random.randint(8, 16)
+        password = ""
+        if randomized:
+            choices = {
+                1: lambda: random.choice(string.ascii_lowercase),
+                2: lambda: random.choice(string.ascii_uppercase),
+                3: lambda: random.choice(('!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', 
+        ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~')),
+                4: lambda: random.choice(string.digits)}
+            while len(password) < length:
+                password += choices[random.randint(1, 4)]()
+        return password
 
 dataGenerator = DataGenerator()
 print(dataGenerator.simple_generate('full_name', 10))
 print(dataGenerator.generate_email('John', 'Doe', 'yahoo.com'))
+print(dataGenerator.generate_password(length = 10))
