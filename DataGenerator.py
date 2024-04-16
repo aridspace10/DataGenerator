@@ -91,16 +91,19 @@ class DataGenerator():
             raise ValueError("length must be an integer larger the  4")
         if not length:
             length = random.randint(8, 16)
+        choices = {
+                1: lambda: random.choice(string.ascii_lowercase)}
+        if uppercase:        
+            choices[len(choices) + 1] = lambda: random.choice(string.ascii_uppercase)
+        if special_chars:          
+            choices[len(choices) + 1] = lambda: random.choice(('!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', 
+            ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'))
+        if numbers:
+            choices[len(choices) + 1] = lambda: random.choice(string.digits)
         password = ""
         if randomized:
-            choices = {
-                1: lambda: random.choice(string.ascii_lowercase),
-                2: lambda: random.choice(string.ascii_uppercase),
-                3: lambda: random.choice(('!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', 
-        ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~')),
-                4: lambda: random.choice(string.digits)}
             while len(password) < length:
-                password += choices[random.randint(1, 4)]()
+                password += choices[random.randint(1, len(choices))]()
         return password
 
 dataGenerator = DataGenerator()
