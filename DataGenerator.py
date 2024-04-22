@@ -86,14 +86,15 @@ class DataGenerator():
         else:
             email += "@" + domain
         return email
-    def generate_password(self, length: int = 0, randomized: bool = True, special_chars: bool = False, numbers: bool = False, uppercase: bool = False, keyword: str = "") -> str:
-        if not isinstance(length, int) or (length < 4 and length != 0):
-            raise ValueError("length must be an integer larger the  4")
+    def generate_password(self, length: int = 0, randomized: bool = False, special_chars: bool = False, numbers: bool = False, uppercase: bool = False, keyword: str = "") -> str:
+        if not isinstance(length, int) or (length < 4 and not length):
+            raise ValueError("length must be an integer larger the 4")
+
         if not length:
             length = random.randint(8, 16)
         choices = {
                 1: lambda: random.choice(string.ascii_lowercase)}
-        if uppercase:        
+        if uppercase and not randomized:        
             choices[len(choices) + 1] = lambda: random.choice(string.ascii_uppercase)
         if special_chars:          
             choices[len(choices) + 1] = lambda: random.choice(('!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/', 
@@ -104,9 +105,20 @@ class DataGenerator():
         if randomized:
             while len(password) < length:
                 password += choices[random.randint(1, len(choices))]()
+        else:
+            password = ""
+            if special_chars:
+                convert = {"s": ["$"], "a": ["&","@"]}
+                for i in range(0, len(keyword)):
+                    if keyword[i] in convert:
+                        if random.randint(1, 2) == 1:
+                            password += random.choice(convert[keyword[i]])
+                            continue
+                    password += keyword[i]
+
         return password
 
 dataGenerator = DataGenerator()
 print(dataGenerator.simple_generate('full_name', 10))
 print(dataGenerator.generate_email('John', 'Doe', 'yahoo.com'))
-print(dataGenerator.generate_password(length = 10))
+print(dataGenerator.generate_password(keyword="password", special_chars=True, length = 10))
