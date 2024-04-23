@@ -107,18 +107,24 @@ class DataGenerator():
                 password += choices[random.randint(1, len(choices))]()
         else:
             password = ""
-            if special_chars:
-                convert = {"s": ["$"], "a": ["&","@"]}
-                for i in range(0, len(keyword)):
-                    if keyword[i] in convert:
+            convert = {"s": ["$"], "a": ["&","@"]}
+            for i in range(0, len(keyword)):
+                if keyword[i] in convert:
+                    if special_chars:
                         if random.randint(1, 2) == 1:
                             password += random.choice(convert[keyword[i]])
                             continue
-                    password += keyword[i]
+                password += keyword[i]
+            if numbers:
+                split = random.randint(1, length - len(password))
+                prefix = ''.join([random.choice(string.digits) for _ in range(split)])
+                postfix = ''.join([random.choice(string.digits) for _ in range(split, length - len(password))])
+                return prefix + password + postfix
+            return password
 
         return password
 
 dataGenerator = DataGenerator()
 print(dataGenerator.simple_generate('full_name', 10))
 print(dataGenerator.generate_email('John', 'Doe', 'yahoo.com'))
-print(dataGenerator.generate_password(keyword="password", special_chars=True, length = 10))
+print(dataGenerator.generate_password(keyword="password", special_chars=True, numbers=True, length = 10))
