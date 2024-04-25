@@ -2,7 +2,7 @@ import random
 import string
 import datetime
 
-AVAILABLE_TYPES = ['fname', 'lname', 'full_name']
+AVAILABLE_TYPES = ['fname', 'lname', 'full_name', 'street']
 DOMAINS = ['@gmail.com', '@yahoo.com', '@outlook.com']
 class DataGenerator():
     def __init__(self):
@@ -134,6 +134,7 @@ class DataGenerator():
 
 dataGenerator = DataGenerator()
 print(dataGenerator.simple_generate('full_name', 10))
+print(dataGenerator.simple_generate('street', 10))
 print(dataGenerator.generate_email('John', 'Doe', 'yahoo.com'))
 print(dataGenerator.generate_password(keyword="password", special_chars=True, numbers=True, length = 10))
 print(dataGenerator.generate_DOB(range=[1,34675]))
