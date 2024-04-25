@@ -1,5 +1,6 @@
 import random
 import string
+import datetime
 
 AVAILABLE_TYPES = ['fname', 'lname', 'full_name']
 DOMAINS = ['@gmail.com', '@yahoo.com', '@outlook.com']
@@ -7,7 +8,8 @@ class DataGenerator():
     def __init__(self):
         self.types = []
         self.parameters = {}
-    def add(self, type: str, n: int, duplicate: bool = False, domain: str = "", minlen: int = 0, maxlen: int = 12):
+        self.data = []
+    def add(self, type: str, n: int, duplicate: bool = False, domain: str = "", minlen: int = 0, maxlen: int = 12) -> None:
         if minlen < 0:
             raise ValueError("minlen must be a positive integer")
         if maxlen < 0:
@@ -108,13 +110,13 @@ class DataGenerator():
         else:
             password = ""
             convert = {"s": ["$"], "a": ["&","@"]}
-            for i in range(0, len(keyword)):
-                if keyword[i] in convert:
+            for index, char in enumerate(keyword):
+                if char in convert:
                     if special_chars:
                         if random.randint(1, 2) == 1:
-                            password += random.choice(convert[keyword[i]])
+                            password += random.choice(convert[char])
                             continue
-                password += keyword[i]
+                password += char
             if numbers:
                 split = random.randint(1, length - len(password))
                 prefix = ''.join([random.choice(string.digits) for _ in range(split)])
@@ -124,7 +126,14 @@ class DataGenerator():
 
         return password
 
+    def generate_DOB(self, range: list = [1,34675]) -> str:
+        today = datetime.datetime.now()
+        rand = today - datetime.timedelta(days=random.randint(range[0], range[1]))
+
+        return rand.strftime("%d/%m/%Y")
+
 dataGenerator = DataGenerator()
 print(dataGenerator.simple_generate('full_name', 10))
 print(dataGenerator.generate_email('John', 'Doe', 'yahoo.com'))
 print(dataGenerator.generate_password(keyword="password", special_chars=True, numbers=True, length = 10))
+print(dataGenerator.generate_DOB(range=[1,34675]))
