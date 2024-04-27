@@ -69,18 +69,19 @@ class DataGenerator():
             email += fname
         else:
             choice = random.randint(1, 6)
-            if choice == 1:
-                email += fname + lname
-            elif choice == 2:
-                email += lname + fname[0]
-            elif choice == 3:
-                email += fname[0] + lname
-            elif choice == 4:
-                email += fname + lname[0]
-            elif choice == 5:
-                email += lname[0] + fname
-            elif choice == 6:
-                email += fname[0] + lname[0]
+            match choice:
+                case 1:
+                    email += fname + lname
+                case 2:
+                    email += lname + fname[0]
+                case 3:
+                    email += fname[0] + lname
+                case 4:
+                    email += fname + lname[0]
+                case 5:
+                    email += lname[0] + fname
+                case 6:
+                    email += fname[0] + lname[0]
         while random.randint(1, 2) == 1:
             email += str(random.randint(0, 9))
         if not domain:
@@ -131,6 +132,8 @@ class DataGenerator():
         rand = today - datetime.timedelta(days=random.randint(range[0], range[1]))
 
         return rand.strftime("%d/%m/%Y")
+
+
 
 dataGenerator = DataGenerator()
 print(dataGenerator.simple_generate('full_name', 10))
